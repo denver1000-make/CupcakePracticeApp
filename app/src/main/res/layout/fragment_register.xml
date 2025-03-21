@@ -55,4 +55,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Button" />
+
+    <TextView
+        android:id="@+id/toggleVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Toggle Version"
+        android:textSize="20sp" />
+
 </LinearLayout>

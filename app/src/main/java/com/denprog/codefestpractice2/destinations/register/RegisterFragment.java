@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,13 +22,8 @@ import com.denprog.codefestpractice2.databinding.FragmentRegisterBinding;
 import com.denprog.codefestpractice2.destinations.state.RegisterFormState;
 
 public class RegisterFragment extends Fragment {
-
     private RegisterViewModel mViewModel;
     private FragmentRegisterBinding binding;
-
-    public static RegisterFragment newInstance() {
-        return new RegisterFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -40,6 +37,8 @@ public class RegisterFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
+        int args = RegisterFragmentArgs.fromBundle(getArguments()).getValidationVersion();
+        binding.toggleVersion.setText("Toggle Version current version is " + args);
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -58,37 +57,46 @@ public class RegisterFragment extends Fragment {
                 String password = binding.passwordField.getText().toString();
                 String confirmPassword = binding.confirmPasswordField.getText().toString();
                 String userName = binding.usernameField.getText().toString();
-                mViewModel.onDataChanged(email, userName, password, confirmPassword);
+                if (args == 1) {
+                    mViewModel.onDataChanged(email, userName, password, confirmPassword);
+                } else {
+                    mViewModel.onDataChangedV2(email, userName, password, confirmPassword);
+                }
             }
         };
+
         this.binding.confirmPasswordField.addTextChangedListener(textWatcher);
         this.binding.passwordField.addTextChangedListener(textWatcher);
         this.binding.emailField.addTextChangedListener(textWatcher);
         this.binding.usernameField.addTextChangedListener(textWatcher);
 
-        mViewModel.mutableLiveData.observe(getViewLifecycleOwner(), new Observer<RegisterFormState>() {
-            public void onChanged(RegisterFormState registerFormState) {
-                if (registerFormState != null) {
-                    binding.registerAction.setEnabled(registerFormState.isDataValid);
-                    if (registerFormState.userNameError != null) {
-                        binding.usernameField.setError(registerFormState.userNameError);
-                        return;
-                    }
-                    if (registerFormState.emailError != null) {
-                        binding.emailField.setError(registerFormState.emailError);
-                        return;
-                    }
-                    if (registerFormState.passwordError != null) {
-                        binding.passwordField.setError(registerFormState.passwordError);
-                        return;
-                    }
-                    if (registerFormState.confirmPasswordError != null) {
-                        binding.confirmPasswordField.setError(registerFormState.confirmPasswordError);
-                        return;
-                    }
-                } else {
-                    binding.registerAction.setEnabled(false);
+        mViewModel.mutableLiveData.observe(getViewLifecycleOwner(), registerFormState -> {
+            if (registerFormState != null) {
+                binding.registerAction.setEnabled(registerFormState.isDataValid);
+                if (registerFormState.userNameError != null) {
+                    binding.usernameField.setError(registerFormState.userNameError);
                 }
+                if (registerFormState.emailError != null) {
+                    binding.emailField.setError(registerFormState.emailError);
+                }
+                if (registerFormState.passwordError != null) {
+                    binding.passwordField.setError(registerFormState.passwordError);
+                }
+                if (registerFormState.confirmPasswordError != null) {
+                    binding.confirmPasswordField.setError(registerFormState.confirmPasswordError);
+                }
+            } else {
+                binding.registerAction.setEnabled(false);
+            }
+        });
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
+
+        binding.toggleVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RegisterFragmentDirections.ActionRegisterFragmentSelf directions = RegisterFragmentDirections.actionRegisterFragmentSelf();
+                directions.setValidationVersion(args == 1 ? 2 : 1);
+                navController.navigate(directions);
             }
         });
 

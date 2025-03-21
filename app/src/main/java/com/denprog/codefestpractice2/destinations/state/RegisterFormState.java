@@ -17,12 +17,4 @@ public class RegisterFormState {
         this.confirmPasswordError = confirmPasswordError;
         this.isDataValid = isDataValid;
     }
-
-    public RegisterFormState(boolean isDataValid) {
-        this.userNameError = null;
-        this.emailError = null;
-        this.passwordError = null;
-        this.confirmPasswordError = null;
-        this.isDataValid = isDataValid;
-    }
 }

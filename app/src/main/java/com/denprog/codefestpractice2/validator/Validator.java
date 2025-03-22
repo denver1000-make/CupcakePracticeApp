@@ -74,4 +74,12 @@ public class Validator {
         }
     }
 
+    public static String normalValidation(String input) {
+        if (isInputEmpty(input)) {
+            return "Field is empty";
+        } else {
+            return null;
+        }
+    }
+
 }

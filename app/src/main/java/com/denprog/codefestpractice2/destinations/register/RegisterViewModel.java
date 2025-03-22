@@ -5,9 +5,30 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.denprog.codefestpractice2.destinations.state.RegisterFormState;
+import com.denprog.codefestpractice2.room.AppDatabase;
+import com.denprog.codefestpractice2.room.dao.AppDao;
+import com.denprog.codefestpractice2.room.entity.User;
+import com.denprog.codefestpractice2.util.SimpleOperationCallback;
 import com.denprog.codefestpractice2.validator.Validator;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class RegisterViewModel extends ViewModel {
+    AppDao appDao;
+    @Inject
+    public RegisterViewModel(AppDatabase appDatabase) {
+        this.appDao = appDatabase.getAppDao();
+    }
+
     public MutableLiveData<RegisterFormState> mutableLiveData = new MediatorLiveData<>(null);
 
     public void onDataChanged(String email, String username, String password, String confirmPassword) {
@@ -54,6 +75,35 @@ public class RegisterViewModel extends ViewModel {
             registerFormState.isDataValid = true;
         }
         this.mutableLiveData.setValue(registerFormState);
+    }
+
+    public void register(String email, String username, String password, SimpleOperationCallback<User> simpleOperationCallback) {
+        User user = new User(username, email, password);
+        simpleOperationCallback.onLoading();
+        CompletableFuture<Long> completableFuture = CompletableFuture.supplyAsync(new Supplier<Long>() {
+            @Override
+            public Long get() {
+                return appDao.insertUser(user);
+            }
+        });
+        completableFuture.thenAcceptAsync(new Consumer<Long>() {
+            @Override
+            public void accept(Long aLong) {
+                List<User> users = appDao.getUserById(aLong);
+                if (!users.isEmpty()) {
+                    simpleOperationCallback.onFinished(users.get(0));
+                } else {
+                    simpleOperationCallback.onError("Something went wrong.");
+                }
+            }
+        });
+        completableFuture.exceptionally(new Function<Throwable, Long>() {
+            @Override
+            public Long apply(Throwable throwable) {
+                simpleOperationCallback.onError(throwable.getLocalizedMessage());
+                return 0L;
+            }
+        });
     }
 
 }

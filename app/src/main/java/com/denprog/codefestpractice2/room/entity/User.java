@@ -1,16 +1,19 @@
 package com.denprog.codefestpractice2.room.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class User {
-
+public class User implements Parcelable {
     @PrimaryKey(autoGenerate = true)
-    int userId;
-    String username;
-    String email;
-    String password;
+    public long userId;
+    public String username;
+    public String email;
+    public String password;
 
     public User(String username, String email, String password) {
         this.username = username;
@@ -18,35 +21,35 @@ public class User {
         this.password = password;
     }
 
-    public int getUserId() {
-        return userId;
+    protected User(Parcel in) {
+        userId = in.readLong();
+        username = in.readString();
+        email = in.readString();
+        password = in.readString();
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeLong(userId);
+        parcel.writeString(username);
+        parcel.writeString(email);
+        parcel.writeString(password);
     }
 }

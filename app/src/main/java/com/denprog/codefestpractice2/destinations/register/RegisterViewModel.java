@@ -1,5 +1,9 @@
 package com.denprog.codefestpractice2.destinations.register;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,9 +12,11 @@ import com.denprog.codefestpractice2.destinations.state.RegisterFormState;
 import com.denprog.codefestpractice2.room.AppDatabase;
 import com.denprog.codefestpractice2.room.dao.AppDao;
 import com.denprog.codefestpractice2.room.entity.User;
+import com.denprog.codefestpractice2.util.FileUtil;
 import com.denprog.codefestpractice2.util.SimpleOperationCallback;
 import com.denprog.codefestpractice2.validator.Validator;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -24,6 +30,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class RegisterViewModel extends ViewModel {
     AppDao appDao;
+    MutableLiveData<Bitmap> selectedProfileUri = new MutableLiveData<>(null);
     @Inject
     public RegisterViewModel(AppDatabase appDatabase) {
         this.appDao = appDatabase.getAppDao();
@@ -77,8 +84,27 @@ public class RegisterViewModel extends ViewModel {
         this.mutableLiveData.setValue(registerFormState);
     }
 
-    public void register(String email, String username, String password, SimpleOperationCallback<User> simpleOperationCallback) {
-        User user = new User(username, email, password);
+    public void register(Context context, Bitmap bitmap, String email, String username, String password, SimpleOperationCallback<User> simpleOperationCallback) {
+
+        String path;
+        if (bitmap != null) {
+            path = FileUtil.saveUriToInternalStorageAndReturnPath(
+                    context,
+                    bitmap,
+                    FileUtil.PROFILE_PICTURE_FOLDER_NAME,
+                    username + FileUtil.generateRandomKeys(4),
+                    username + FileUtil.PROFILE_PIC_EXTENSION);
+        } else {
+            simpleOperationCallback.onError("No Selected Profile Picture");
+            return;
+        }
+
+        if (path == null) {
+            simpleOperationCallback.onError("Something went wrong in loading the image.");
+            return;
+        }
+
+        User user = new User(username, email, password, path);
         simpleOperationCallback.onLoading();
         CompletableFuture<Long> completableFuture = CompletableFuture.supplyAsync(new Supplier<Long>() {
             @Override

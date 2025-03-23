@@ -70,6 +70,13 @@ public class LoginFragment extends Fragment implements SimpleOperationCallback<U
                 });
             }
         });
+        binding.registerRedirect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.registerFragment
+                );
+            }
+        });
     }
 
     public void checkForRegistrationRedirectArgs() {
@@ -177,7 +184,7 @@ public class LoginFragment extends Fragment implements SimpleOperationCallback<U
         Bundle bundle = new Bundle();
         bundle.putString("email", user.email);
         bundle.putString("username", user.username);
-        navController.navigate(R.id.homeFragment, bundle, navOptions);
+        navController.navigate(R.id.homeActivity2, bundle, navOptions);
     }
 
     private void showSaveCredentialsPrompt(DialogInterface.OnClickListener positive,  DialogInterface.OnClickListener negative, DialogInterface.OnDismissListener dismissListener) {

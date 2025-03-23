@@ -20,7 +20,10 @@ public interface AppDao {
     List<User> getUserById(Long aLong);
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveUserIdToQuickLogin(SavedUser savedUser);
-
     @Query("SELECT * FROM SavedUser")
     List<SavedUser> getAllSavedUser();
+
+
+    @Query("SELECT * FROM User WHERE email =:email")
+    List<User> getUserByEmail(String email);
 }

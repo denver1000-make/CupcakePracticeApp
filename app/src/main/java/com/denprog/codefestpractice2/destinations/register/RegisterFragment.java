@@ -1,10 +1,16 @@
 package com.denprog.codefestpractice2.destinations.register;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,16 +30,28 @@ import com.denprog.codefestpractice2.R;
 import com.denprog.codefestpractice2.databinding.FragmentRegisterBinding;
 import com.denprog.codefestpractice2.destinations.state.RegisterFormState;
 import com.denprog.codefestpractice2.room.entity.User;
+import com.denprog.codefestpractice2.util.FileUtil;
 import com.denprog.codefestpractice2.util.MainThreadRunner;
 import com.denprog.codefestpractice2.util.SimpleOperationCallback;
+
+import java.io.File;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class RegisterFragment extends Fragment {
+
+    private ActivityResultLauncher<PickVisualMediaRequest> imagePicker = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), new ActivityResultCallback<Uri>() {
+        @Override
+        public void onActivityResult(Uri o) {
+            if (o != null) {
+                mViewModel.selectedProfileUri.setValue(FileUtil.convertUriToBitmap(o, requireContext()));
+            }
+        }
+    });
+
     private RegisterViewModel mViewModel;
     private FragmentRegisterBinding binding;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -62,7 +80,6 @@ public class RegisterFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 String email = binding.emailField.getText().toString();
                 String password = binding.passwordField.getText().toString();
                 String confirmPassword = binding.confirmPasswordField.getText().toString();
@@ -74,7 +91,7 @@ public class RegisterFragment extends Fragment {
                 }
             }
         };
-
+        this.binding.imageView.setOnClickListener(view -> imagePicker.launch(new PickVisualMediaRequest.Builder().setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE).build()));
         this.binding.confirmPasswordField.addTextChangedListener(textWatcher);
         this.binding.passwordField.addTextChangedListener(textWatcher);
         this.binding.emailField.addTextChangedListener(textWatcher);
@@ -99,8 +116,17 @@ public class RegisterFragment extends Fragment {
                 binding.registerAction.setEnabled(false);
             }
         });
-        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
 
+        mViewModel.selectedProfileUri.observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
+            @Override
+            public void onChanged(Bitmap bitmap) {
+                if (bitmap != null) {
+                    binding.imageView.setImageBitmap(bitmap);
+                }
+            }
+        });
+
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
         binding.toggleVersion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,7 +142,8 @@ public class RegisterFragment extends Fragment {
                 String email = binding.emailField.getText().toString();
                 String username = binding.usernameField.getText().toString();
                 String password = binding.passwordField.getText().toString();
-                mViewModel.register(email, username, password, new SimpleOperationCallback<User>() {
+                Bitmap bitmap = mViewModel.selectedProfileUri.getValue();
+                mViewModel.register(requireContext(), bitmap, email, username, password, new SimpleOperationCallback<User>() {
                     @Override
                     public void onLoading() {
                         MainThreadRunner.runOnMain(RegisterFragment.this::showProgressDialog);

@@ -14,11 +14,13 @@ public class User implements Parcelable {
     public String username;
     public String email;
     public String password;
+    public String profilePicPath;
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, String profilePicPath) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.profilePicPath = profilePicPath;
     }
 
     protected User(Parcel in) {
@@ -26,6 +28,7 @@ public class User implements Parcelable {
         username = in.readString();
         email = in.readString();
         password = in.readString();
+        profilePicPath = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -51,5 +54,6 @@ public class User implements Parcelable {
         parcel.writeString(username);
         parcel.writeString(email);
         parcel.writeString(password);
+        parcel.writeString(profilePicPath);
     }
 }

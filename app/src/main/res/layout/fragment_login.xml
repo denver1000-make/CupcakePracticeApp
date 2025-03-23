@@ -34,4 +34,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login" />
+
+    <TextView
+        android:id="@+id/registerRedirect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Redirect To Register" />
 </LinearLayout>

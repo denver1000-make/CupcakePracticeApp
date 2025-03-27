@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,12 +16,16 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.denprog.codefestpractice2.base.SelectionBase;
 import com.denprog.codefestpractice2.databinding.ActivityHomeBinding;
 import com.denprog.codefestpractice2.databinding.HeaderLayoutBinding;
 import com.denprog.codefestpractice2.room.entity.User;
 import com.denprog.codefestpractice2.util.FileUtil;
 import com.denprog.codefestpractice2.util.MainThreadRunner;
 import com.denprog.codefestpractice2.util.SimpleOperationCallback;
+
+import java.util.HashMap;
+import java.util.function.Consumer;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -36,7 +41,20 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         binding = com.denprog.codefestpractice2.databinding.ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         this.viewModel = new ViewModelProvider(this).get(HomeActivityViewModel.class);
+        this.viewModel.selectionsPrice.observe(this, new Observer<HashMap<String, SelectionBase>>() {
+            @Override
+            public void onChanged(HashMap<String, SelectionBase> stringSelectionBaseHashMap) {
+                float total = 0f;
+                if (stringSelectionBaseHashMap != null) {
+                    for (SelectionBase value : stringSelectionBaseHashMap.values()) {
+                        total += value.price;
+                    }
+                }
+                binding.appbar.appContent.totalDisplay.setText("Total Price is " + total + " pesos.");
+            }
+        });
         HomeActivityArgs args = HomeActivityArgs.fromBundle(getIntent().getExtras());
         viewModel.loadUserInfoToHeader(args.getEmail(), new SimpleOperationCallback<User>() {
             @Override
@@ -65,13 +83,13 @@ public class HomeActivity extends AppCompatActivity {
                 });
             }
         });
-        setContentView(binding.getRoot());
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         NavController navController = NavHostFragment.findNavController(binding.appbar.appContent.fragmentContainerView2.getFragment());
         setSupportActionBar(binding.appbar.toolbar);
         this.appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeFragment2).setOpenableLayout(binding.drawerLayout).build();

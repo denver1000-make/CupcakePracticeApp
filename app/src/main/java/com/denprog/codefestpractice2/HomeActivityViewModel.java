@@ -1,12 +1,15 @@
 package com.denprog.codefestpractice2;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.denprog.codefestpractice2.base.SelectionBase;
 import com.denprog.codefestpractice2.room.AppDatabase;
 import com.denprog.codefestpractice2.room.dao.AppDao;
 import com.denprog.codefestpractice2.room.entity.User;
 import com.denprog.codefestpractice2.util.SimpleOperationCallback;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -19,8 +22,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class HomeActivityViewModel extends ViewModel {
-
     AppDao appDao;
+    public MutableLiveData<HashMap<String, SelectionBase>> selectionsPrice = new MutableLiveData<>(new HashMap<>());
 
     @Inject
     public HomeActivityViewModel(AppDatabase appDatabase) {

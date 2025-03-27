@@ -9,5 +9,56 @@
         android:id="@+id/homeFragment2"
         android:name="com.denprog.codefestpractice2.destinations.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment2_to_cakeFlavorFragment"
+            app:destination="@id/cakeFlavorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderHistoryFragment"
+        android:name="com.denprog.codefestpractice2.destinations.order_history.OrderHistoryFragment"
+        android:label="fragment_order_history_list"
+        tools:layout="@layout/fragment_order_history_list" />
+    <fragment
+        android:id="@+id/whippedCreamFlavorFragment"
+        android:name="com.denprog.codefestpractice2.destinations.whipped_cream_flavor_selection.WhippedCreamFlavorFragment"
+        android:label="WhippedCreamFlavorFragment" >
+        <action
+            android:id="@+id/action_whippedCreamFlavorFragment_to_filledOrPlainFragment"
+            app:destination="@id/filledOrPlainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cakeFlavorFragment"
+        android:name="com.denprog.codefestpractice2.destinations.cake_flavor_selection.CakeFlavorFragment"
+        android:label="fragment_cake_flavor_list"
+        tools:layout="@layout/fragment_cake_flavor_list" >
+        <action
+            android:id="@+id/action_cakeFlavorFragment_to_whippedCreamFlavorFragment"
+            app:destination="@id/whippedCreamFlavorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filledOrPlainFragment"
+        android:name="com.denprog.codefestpractice2.destinations.filled_or_plain.FilledOrPlainFragment"
+        android:label="fragment_filled_or_plain"
+        tools:layout="@layout/fragment_filled_or_plain" >
+        <action
+            android:id="@+id/action_filledOrPlainFragment_to_designPickerFragment"
+            app:destination="@id/designPickerFragment" />
+        <action
+            android:id="@+id/action_filledOrPlainFragment_to_fillingFlavorFragment"
+            app:destination="@id/fillingFlavorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/designPickerFragment"
+        android:name="com.denprog.codefestpractice2.destinations.design.DesignPickerFragment"
+        android:label="fragment_design_picker"
+        tools:layout="@layout/fragment_design_picker" />
+    <fragment
+        android:id="@+id/fillingFlavorFragment"
+        android:name="com.denprog.codefestpractice2.destinations.filling_flavor_selection.FillingFlavorFragment"
+        android:label="FillingFlavorFragment" >
+        <action
+            android:id="@+id/action_fillingFlavorFragment_to_designPickerFragment"
+            app:destination="@id/designPickerFragment" />
+    </fragment>
 </navigation>

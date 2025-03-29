@@ -52,7 +52,11 @@
         android:id="@+id/designPickerFragment"
         android:name="com.denprog.codefestpractice2.destinations.design.DesignPickerFragment"
         android:label="fragment_design_picker"
-        tools:layout="@layout/fragment_design_picker" />
+        tools:layout="@layout/fragment_design_picker" >
+        <action
+            android:id="@+id/action_designPickerFragment_to_personalDetailsFragment"
+            app:destination="@id/personalDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/fillingFlavorFragment"
         android:name="com.denprog.codefestpractice2.destinations.filling_flavor_selection.FillingFlavorFragment"
@@ -60,5 +64,31 @@
         <action
             android:id="@+id/action_fillingFlavorFragment_to_designPickerFragment"
             app:destination="@id/designPickerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/checkOutFragment"
+        android:name="com.denprog.codefestpractice2.destinations.checkout.CheckOutFragment"
+        android:label="CheckOutFragment" >
+        <argument
+            android:name="firstName"
+            app:argType="string" />
+        <argument
+            android:name="middleName"
+            app:argType="string" />
+        <argument
+            android:name="lastName"
+            app:argType="string" />
+        <argument
+            android:name="cakeMessage"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/personalDetailsFragment"
+        android:name="com.denprog.codefestpractice2.destinations.personal_details.PersonalDetailsFragment"
+        android:label="fragment_personal_details"
+        tools:layout="@layout/fragment_personal_details" >
+        <action
+            android:id="@+id/action_personalDetailsFragment_to_checkOutFragment"
+            app:destination="@id/checkOutFragment" />
     </fragment>
 </navigation>

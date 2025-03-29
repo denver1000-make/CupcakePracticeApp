@@ -73,6 +73,8 @@ public class DesignPickerFragment extends Fragment {
                     HashMap<String, SelectionBase> selectedMaps = homeActivityViewModel.selectionsPrice.getValue();
                     selectedMaps.put(DESIGN_SELECTION_KEY, new Design("Custom Img", 1000, selectedCustomImage));
                     homeActivityViewModel.selectionsPrice.setValue(selectedMaps);
+                    NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView2);
+                    navController.navigate(DesignPickerFragmentDirections.actionDesignPickerFragmentToPersonalDetailsFragment());
                 } else {
                     Toast.makeText(requireContext(), "No Selected Custom Image", Toast.LENGTH_SHORT).show();
                 }

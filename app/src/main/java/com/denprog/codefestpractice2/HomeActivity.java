@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         HomeActivityArgs args = HomeActivityArgs.fromBundle(getIntent().getExtras());
-        viewModel.loadUserInfoToHeader(args.getEmail(), new SimpleOperationCallback<User>() {
+        viewModel.loadUserInfoToHeader(args.getEmail(), new SimpleOperationCallback<>() {
             @Override
             public void onLoading() {
 
@@ -64,6 +64,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onFinished(User data) {
+                viewModel.userMutableLiveData.setValue(data);
                 MainThreadRunner.runOnMain(() -> {
                     HeaderLayoutBinding headerLayoutBinding = HeaderLayoutBinding.bind(binding.navigationView.getHeaderView(0));
                     headerLayoutBinding.headerEmail.setText(data.email);
@@ -102,4 +103,5 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = NavHostFragment.findNavController(binding.appbar.appContent.fragmentContainerView2.getFragment());
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
+
 }

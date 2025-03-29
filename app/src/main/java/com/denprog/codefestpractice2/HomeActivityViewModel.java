@@ -1,9 +1,11 @@
 package com.denprog.codefestpractice2;
 
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.denprog.codefestpractice2.base.SelectionBase;
+import com.denprog.codefestpractice2.destinations.personal_details.PersonalDetails;
 import com.denprog.codefestpractice2.room.AppDatabase;
 import com.denprog.codefestpractice2.room.dao.AppDao;
 import com.denprog.codefestpractice2.room.entity.User;
@@ -24,7 +26,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class HomeActivityViewModel extends ViewModel {
     AppDao appDao;
     public MutableLiveData<HashMap<String, SelectionBase>> selectionsPrice = new MutableLiveData<>(new HashMap<>());
-
+    public MutableLiveData<PersonalDetails> personalDetailsMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<User> userMutableLiveData = new MediatorLiveData<>(null);
     @Inject
     public HomeActivityViewModel(AppDatabase appDatabase) {
         this.appDao = appDatabase.getAppDao();

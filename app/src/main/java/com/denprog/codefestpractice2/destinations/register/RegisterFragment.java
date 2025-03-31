@@ -117,12 +117,9 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        mViewModel.selectedProfileUri.observe(getViewLifecycleOwner(), new Observer<Bitmap>() {
-            @Override
-            public void onChanged(Bitmap bitmap) {
-                if (bitmap != null) {
-                    binding.imageView.setImageBitmap(bitmap);
-                }
+        mViewModel.selectedProfileUri.observe(getViewLifecycleOwner(), bitmap -> {
+            if (bitmap != null) {
+                binding.imageView.setImageBitmap(bitmap);
             }
         });
 

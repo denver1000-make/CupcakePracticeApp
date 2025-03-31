@@ -5,12 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class FileUtil {
 
@@ -19,7 +21,12 @@ public class FileUtil {
 
     public static Bitmap convertUriToBitmap(Uri uri, Context context) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-            return BitmapFactory.decodeStream(inputStream);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            Bitmap outputBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            return outputBitmap;
         } catch (IOException e) {
             return null;
         }

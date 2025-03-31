@@ -23,6 +23,7 @@ import com.denprog.codefestpractice2.base.SelectionBase;
 import com.denprog.codefestpractice2.databinding.FragmentCakeFlavorItemBinding;
 import com.denprog.codefestpractice2.databinding.FragmentCakeFlavorListBinding;
 import com.denprog.codefestpractice2.destinations.cake_flavor_selection.obj.CakeFlavor;
+import com.denprog.codefestpractice2.destinations.cake_flavor_selection.obj.CakeFlavorV2;
 import com.denprog.codefestpractice2.destinations.cake_flavor_selection.placeholder.PlaceholderContent;
 import com.denprog.codefestpractice2.util.SimpleLambdaCallback;
 
@@ -41,13 +42,7 @@ public class CakeFlavorFragment extends Fragment {
         binding.list.setAdapter(new CakeFlavorRecyclerViewAdapter(new SimpleLambdaCallback<CakeFlavor>() {
             @Override
             public void doThing(CakeFlavor data) {
-                HashMap<String, SelectionBase> hashMap = homeActivityViewModel.selectionsPrice.getValue();
-                if (hashMap == null) {
-                    hashMap = new HashMap<>();
-                }
-                hashMap.put(SELECTION_KEY, data);
-                homeActivityViewModel.selectionsPrice.setValue(hashMap);
-                navController.navigate(R.id.whippedCreamFlavorFragment);
+                navController.navigate(CakeFlavorFragmentDirections.actionCakeFlavorFragmentToWhippedCreamFlavorFragment(new CakeFlavorV2(data.name, data.price)));
             }
         }));
         return binding.getRoot();

@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.denprog.codefestpractice2.destinations.checkout.CheckOutObj;
 import com.denprog.codefestpractice2.destinations.order_history.placeholder.PlaceholderContent.PlaceholderItem;
 import com.denprog.codefestpractice2.databinding.FragmentOrderHistoryBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,10 +19,12 @@ import java.util.List;
  */
 public class OrderHistoryRecyclerViewAdapter extends RecyclerView.Adapter<OrderHistoryRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private List<CheckOutObj> mValues = new ArrayList<>();
 
-    public OrderHistoryRecyclerViewAdapter(List<PlaceholderItem> items) {
-        mValues = items;
+    public void refreshAdapter(List<CheckOutObj> checkOutObjList) {
+        this.mValues.clear();
+        this.mValues.addAll(checkOutObjList);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -33,8 +37,7 @@ public class OrderHistoryRecyclerViewAdapter extends RecyclerView.Adapter<OrderH
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).selectedCakeFlavor);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class OrderHistoryRecyclerViewAdapter extends RecyclerView.Adapter<OrderH
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mIdView;
         public final TextView mContentView;
-        public PlaceholderItem mItem;
+        public CheckOutObj mItem;
 
         public ViewHolder(FragmentOrderHistoryBinding binding) {
             super(binding.getRoot());

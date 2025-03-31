@@ -41,12 +41,11 @@ public class FillingFlavorFragment extends Fragment {
         this.adapter = new FillingFlavorRecyclerViewAdapter(new SimpleLambdaCallback<FillingFlavor>() {
             @Override
             public void doThing(FillingFlavor data) {
-                HashMap<String, SelectionBase> hashMap = viewModel.selectionsPrice.getValue();
-                hashMap.put(FILLING_FLAVOR_SELECTION_KEY, data);
-                viewModel.selectionsPrice.setValue(hashMap);
-
+                FillingFlavorFragmentArgs args = FillingFlavorFragmentArgs.fromBundle(getArguments());
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView2);
-                navController.navigate(R.id.designPickerFragment);
+                FillingFlavorFragmentDirections.ActionFillingFlavorFragmentToDesignPickerFragment directions = FillingFlavorFragmentDirections.actionFillingFlavorFragmentToDesignPickerFragment(args.getCakeFlavorV2(), args.getWhippedCreamFlavorV2());
+                directions.setFillingFlavorV2(new FillingFlavorV2(data.name, data.price));
+                navController.navigate(directions);
             }
         });
         binding.list.setLayoutManager(new LinearLayoutManager(requireContext()));

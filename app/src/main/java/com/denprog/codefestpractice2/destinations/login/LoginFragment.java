@@ -180,11 +180,8 @@ public class LoginFragment extends Fragment implements SimpleOperationCallback<U
     }
 
     private void redirectToHome(User user, NavController navController) {
-        NavOptions navOptions = new NavOptions.Builder().setPopUpTo(navController.getGraph().getStartDestinationId(), true).build();
-        Bundle bundle = new Bundle();
-        bundle.putString("email", user.email);
-        bundle.putString("username", user.username);
-        navController.navigate(R.id.homeActivity2, bundle, navOptions);
+        navController.navigate(LoginFragmentDirections.actionLoginFragmentToHomeActivity2(user.email, user.password));
+        requireActivity().finish();
     }
 
     private void showSaveCredentialsPrompt(DialogInterface.OnClickListener positive,  DialogInterface.OnClickListener negative, DialogInterface.OnDismissListener dismissListener) {

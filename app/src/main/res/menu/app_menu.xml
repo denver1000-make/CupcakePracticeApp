@@ -4,4 +4,8 @@
         android:title="Home"
         android:id="@+id/homeFragment2"
         android:icon="@drawable/ic_launcher_background"/>
+    <item
+        android:title="Order History"
+        android:id="@+id/orderHistoryFragment"
+        android:icon="@drawable/baseline_history_24"/>
 </menu>

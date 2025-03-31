@@ -19,6 +19,7 @@ public class PreMadeDesigns {
 
     public static List<PreMadeDesigns> getPreMadeDesigns() {
         List<PreMadeDesigns> preMadeDesignsList = new ArrayList<>();
+        preMadeDesignsList.add(new PreMadeDesigns(R.drawable.white_image, "Plain", 50f));
         preMadeDesignsList.add(new PreMadeDesigns(R.drawable.bday_cake, "Bday", 100f));
         preMadeDesignsList.add(new PreMadeDesigns(R.drawable.bday_cake, "Bday", 100f));
         preMadeDesignsList.add(new PreMadeDesigns(R.drawable.bday_cake, "Bday", 100f));

@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import com.denprog.codefestpractice2.HomeActivityViewModel;
 import com.denprog.codefestpractice2.R;
 import com.denprog.codefestpractice2.databinding.FragmentPersonalDetailsBinding;
+import com.denprog.codefestpractice2.destinations.design.DesignPickerFragmentArgs;
+import com.denprog.codefestpractice2.destinations.filling_flavor_selection.FillingFlavorV2;
 
 public class PersonalDetailsFragment extends Fragment {
 
@@ -41,9 +43,20 @@ public class PersonalDetailsFragment extends Fragment {
                 String lastName = binding.lastNameField.getText().toString();
                 String middleName = binding.middleNameField.getText().toString();
                 String cakeMessage = binding.cakeMessageField.getText().toString();
+                PersonalDetailsFragmentArgs args = PersonalDetailsFragmentArgs.fromBundle(getArguments());
                 NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView2);
-                homeActivityViewModel.personalDetailsMutableLiveData.setValue(new PersonalDetails(firstName, lastName, middleName, cakeMessage));
-                navController.navigate(PersonalDetailsFragmentDirections.actionPersonalDetailsFragmentToCheckOutFragment(firstName, middleName, lastName, cakeMessage));
+                PersonalDetailsFragmentDirections.ActionPersonalDetailsFragmentToCheckOutFragment directions = PersonalDetailsFragmentDirections.actionPersonalDetailsFragmentToCheckOutFragment(
+                        firstName,
+                        middleName,
+                        lastName,
+                        cakeMessage,
+                        args.getCakeFlavorV2(),
+                        args.getWhippedCreamFlavorV2(),
+                        args.getDesignName(),
+                        args.getFloatPrice());
+                directions.setResource(args.getResource());
+                directions.setFillingFlavorV2(args.getFillingFlavorV2());
+                navController.navigate(directions);
 
             }
         });
@@ -102,6 +115,11 @@ public class PersonalDetailsFragment extends Fragment {
                 }
             }
         });
+        loadTotal(homeActivityViewModel, PersonalDetailsFragmentArgs.fromBundle(getArguments()));
+    }
+    public void loadTotal(HomeActivityViewModel homeActivityViewModel, PersonalDetailsFragmentArgs args) {
+        FillingFlavorV2 fillingFlavorV2 = args.getFillingFlavorV2();
+        homeActivityViewModel.totalPrice.setValue(args.getCakeFlavorV2().cakeFlavorPrice + args.getWhippedCreamFlavorV2().flavorPrice + (fillingFlavorV2 == null ? 0f : fillingFlavorV2.fillingFlavorPrice) + args.getFloatPrice());
     }
 
 }

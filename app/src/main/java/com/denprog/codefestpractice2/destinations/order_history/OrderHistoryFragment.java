@@ -3,7 +3,10 @@ package com.denprog.codefestpractice2.destinations.order_history;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,61 +15,53 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.denprog.codefestpractice2.HomeActivityViewModel;
 import com.denprog.codefestpractice2.R;
+import com.denprog.codefestpractice2.databinding.FragmentOrderHistoryBinding;
+import com.denprog.codefestpractice2.databinding.FragmentOrderHistoryListBinding;
+import com.denprog.codefestpractice2.destinations.checkout.CheckOutObj;
 import com.denprog.codefestpractice2.destinations.order_history.placeholder.PlaceholderContent;
+import com.denprog.codefestpractice2.util.SimpleOperationCallback;
 
-/**
- * A fragment representing a list of Items.
- */
+import java.util.List;
+import java.util.Objects;
+
 public class OrderHistoryFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public OrderHistoryFragment() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static OrderHistoryFragment newInstance(int columnCount) {
-        OrderHistoryFragment fragment = new OrderHistoryFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-    }
+    FragmentOrderHistoryListBinding binding;
+    HomeActivityViewModel homeActivityViewModel;
+    OrderHistoryFragmentViewModel viewModel;
+    OrderHistoryRecyclerViewAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order_history_list, container, false);
+        binding = FragmentOrderHistoryListBinding.inflate(inflater, container, false);
+        this.adapter = new OrderHistoryRecyclerViewAdapter();
+        this.binding.list.setLayoutManager(new LinearLayoutManager(requireContext()));
+        this.binding.list.setAdapter(adapter);
+        return binding.getRoot();
+    }
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.viewModel = new ViewModelProvider(requireActivity()).get(OrderHistoryFragmentViewModel.class);
+        this.homeActivityViewModel = new ViewModelProvider(requireActivity()).get(HomeActivityViewModel.class);
+        viewModel.fetchHistory(Objects.requireNonNull(this.homeActivityViewModel.userMutableLiveData.getValue()).userId, new SimpleOperationCallback<List<CheckOutObj>>() {
+            @Override
+            public void onLoading() {
+
             }
-            recyclerView.setAdapter(new OrderHistoryRecyclerViewAdapter(PlaceholderContent.ITEMS));
-        }
-        return view;
+
+            @Override
+            public void onFinished(List<CheckOutObj> data) {
+                adapter.refreshAdapter(data);
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
     }
 }

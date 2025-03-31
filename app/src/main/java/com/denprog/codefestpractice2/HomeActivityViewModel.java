@@ -25,9 +25,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class HomeActivityViewModel extends ViewModel {
     AppDao appDao;
-    public MutableLiveData<HashMap<String, SelectionBase>> selectionsPrice = new MutableLiveData<>(new HashMap<>());
-    public MutableLiveData<PersonalDetails> personalDetailsMutableLiveData = new MutableLiveData<>();
-    public MutableLiveData<User> userMutableLiveData = new MediatorLiveData<>(null);
+    public MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<Float> totalPrice = new MutableLiveData<>();
     @Inject
     public HomeActivityViewModel(AppDatabase appDatabase) {
         this.appDao = appDatabase.getAppDao();

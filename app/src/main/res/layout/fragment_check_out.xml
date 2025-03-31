@@ -8,6 +8,18 @@
             type="Boolean"
             android:value="false"
             />
+        <variable
+            name="cakeFlavorInf"
+            type="com.denprog.codefestpractice2.destinations.cake_flavor_selection.obj.CakeFlavorV2" />
+        <variable
+            name="whippedCreamFlavor"
+            type="com.denprog.codefestpractice2.destinations.whipped_cream_flavor_selection.obj.WhippedCreamFlavorV2" />
+        <variable
+            name="fillingFlavor"
+            type="com.denprog.codefestpractice2.destinations.filling_flavor_selection.FillingFlavorV2"/>
+        <variable
+            name="design"
+            type="com.denprog.codefestpractice2.destinations.design.Design" />
         <import type="android.view.View"/>
     </data>
 
@@ -19,12 +31,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -81,14 +95,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="@{cakeFlavorInf.cakeFlavorName}" />
 
                 <TextView
                     android:id="@+id/cake_flavor_price_display"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="@{String.valueOf(cakeFlavorInf.cakeFlavorPrice)}" />
             </LinearLayout>
 
             <TextView
@@ -107,14 +121,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="@{whippedCreamFlavor.flavorName}" />
 
                 <TextView
                     android:id="@+id/whipped_cream_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="@{String.valueOf(whippedCreamFlavor.flavorPrice)}" />
             </LinearLayout>
 
             <TextView
@@ -134,14 +148,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="@{fillingFlavor.fillingFlavorName}" />
 
                 <TextView
                     android:id="@+id/filling_flavor_price_display"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TextView" />
+                    android:text="@{String.valueOf(fillingFlavor.fillingFlavorPrice)}" />
             </LinearLayout>
 
             <TextView
@@ -161,14 +175,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="TextView" />
+                android:text="@{design.name}" />
 
             <TextView
                 android:id="@+id/design_price_display"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="TextView" />
+                android:text="@{String.valueOf(design.price)}"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -207,6 +221,12 @@
                     android:layout_weight="1"
                     android:text="TextView" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/check_out_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Check Out" />
 
         </LinearLayout>
 

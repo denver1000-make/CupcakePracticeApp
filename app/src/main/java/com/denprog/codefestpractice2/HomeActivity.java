@@ -1,5 +1,6 @@
 package com.denprog.codefestpractice2;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -43,18 +44,7 @@ public class HomeActivity extends AppCompatActivity {
         binding = com.denprog.codefestpractice2.databinding.ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         this.viewModel = new ViewModelProvider(this).get(HomeActivityViewModel.class);
-        this.viewModel.selectionsPrice.observe(this, new Observer<HashMap<String, SelectionBase>>() {
-            @Override
-            public void onChanged(HashMap<String, SelectionBase> stringSelectionBaseHashMap) {
-                float total = 0f;
-                if (stringSelectionBaseHashMap != null) {
-                    for (SelectionBase value : stringSelectionBaseHashMap.values()) {
-                        total += value.price;
-                    }
-                }
-                binding.appbar.appContent.totalDisplay.setText("Total Price is " + total + " pesos.");
-            }
-        });
+
         HomeActivityArgs args = HomeActivityArgs.fromBundle(getIntent().getExtras());
         viewModel.loadUserInfoToHeader(args.getEmail(), new SimpleOperationCallback<>() {
             @Override
@@ -64,12 +54,14 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onFinished(User data) {
-                viewModel.userMutableLiveData.setValue(data);
                 MainThreadRunner.runOnMain(() -> {
+                    viewModel.userMutableLiveData.setValue(data);
+                    Bitmap bitmap = FileUtil.fromPathToBitmap(data.profilePicPath, HomeActivity.this);
                     HeaderLayoutBinding headerLayoutBinding = HeaderLayoutBinding.bind(binding.navigationView.getHeaderView(0));
                     headerLayoutBinding.headerEmail.setText(data.email);
                     headerLayoutBinding.headerUsername.setText(data.username);
-                    headerLayoutBinding.imageView2.setImageBitmap(FileUtil.fromPathToBitmap(data.profilePicPath, HomeActivity.this));
+
+                    headerLayoutBinding.imageView2.setImageBitmap(bitmap);
                 });
             }
 
@@ -91,9 +83,11 @@ public class HomeActivity extends AppCompatActivity {
             return insets;
         });
 
+        viewModel.totalPrice.observe(this, aFloat -> binding.appbar.appContent.totalDisplay.setText(aFloat + " Pesos"));
+
         NavController navController = NavHostFragment.findNavController(binding.appbar.appContent.fragmentContainerView2.getFragment());
         setSupportActionBar(binding.appbar.toolbar);
-        this.appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeFragment2).setOpenableLayout(binding.drawerLayout).build();
+        this.appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeFragment2, R.id.orderHistoryFragment).setOpenableLayout(binding.drawerLayout).build();
         NavigationUI.setupWithNavController(binding.navigationView, navController);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
     }

@@ -33,7 +33,6 @@ public class PremadeImagesRecyclerViewAdapter extends RecyclerView.Adapter<Prema
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         PremadeDesignItemBinding binding = PremadeDesignItemBinding.inflate(LayoutInflater.from(parent.getContext()));
-
         return new ViewHolder(binding);
     }
 
@@ -41,6 +40,13 @@ public class PremadeImagesRecyclerViewAdapter extends RecyclerView.Adapter<Prema
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PreMadeDesigns preMadeDesigns = preMadeDesignsList.get(position);
         holder.binding.imageView3.setImageResource(preMadeDesigns.resId);
+        holder.binding.Name.setText(preMadeDesigns.name);
+        holder.binding.imageView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPressed.doThing(preMadeDesigns);
+            }
+        });
     }
 
     @Override

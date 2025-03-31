@@ -85,14 +85,13 @@ public class RegisterViewModel extends ViewModel {
     }
 
     public void register(Context context, Bitmap bitmap, String email, String username, String password, SimpleOperationCallback<User> simpleOperationCallback) {
-
         String path;
         if (bitmap != null) {
             path = FileUtil.saveUriToInternalStorageAndReturnPath(
                     context,
                     bitmap,
                     FileUtil.PROFILE_PICTURE_FOLDER_NAME,
-                    username + FileUtil.generateRandomKeys(4),
+                    username + FileUtil.generateRandomKeys(3),
                     username + FileUtil.PROFILE_PIC_EXTENSION);
         } else {
             simpleOperationCallback.onError("No Selected Profile Picture");

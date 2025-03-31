@@ -18,7 +18,6 @@ import com.denprog.codefestpractice2.R;
 import com.denprog.codefestpractice2.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
-    private HomeViewModel mViewModel;
     private FragmentHomeBinding binding;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -30,15 +29,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView2);
         this.binding.button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.cakeFlavorFragment);
+                navController.navigate(HomeFragmentDirections.actionHomeFragment2ToCakeFlavorFragment());
             }
         });
-        // TODO: Use the ViewModel
     }
 
 }

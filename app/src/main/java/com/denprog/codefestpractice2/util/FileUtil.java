@@ -18,7 +18,7 @@ public class FileUtil {
 
     public static final String PROFILE_PICTURE_FOLDER_NAME = "profilePicsImgDat";
     public static final String PROFILE_PIC_EXTENSION = ".png";
-
+    public static final int MAX_SIZE = 250;
     public static Bitmap convertUriToBitmap(Uri uri, Context context) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -29,10 +29,10 @@ public class FileUtil {
             float bitmapDimensionRation = (float) width / (float) height;
 
             if (bitmapDimensionRation > 1) {
-                width = 500;
+                width = MAX_SIZE;
                 height = (int) (width / bitmapDimensionRation);
             } else {
-                height = 500;
+                height = MAX_SIZE;
                 width = (int) (height * bitmapDimensionRation);
             }
 

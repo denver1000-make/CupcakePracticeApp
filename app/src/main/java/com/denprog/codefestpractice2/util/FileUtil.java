@@ -23,10 +23,20 @@ public class FileUtil {
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-            Bitmap outputBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            return outputBitmap;
+            bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            float bitmapDimensionRation = (float) width / (float) height;
+
+            if (bitmapDimensionRation > 1) {
+                width = 500;
+                height = (int) (width / bitmapDimensionRation);
+            } else {
+                height = 500;
+                width = (int) (height * bitmapDimensionRation);
+            }
+
+            return Bitmap.createScaledBitmap(bitmap, width, height, true);
         } catch (IOException e) {
             return null;
         }

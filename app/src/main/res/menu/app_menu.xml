@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:title="Home"
-        android:id="@+id/homeFragment2"
+        android:id="@+id/homeFragment"
         android:icon="@drawable/ic_launcher_background"/>
+
     <item
         android:title="Order History"
         android:id="@+id/orderHistoryFragment"

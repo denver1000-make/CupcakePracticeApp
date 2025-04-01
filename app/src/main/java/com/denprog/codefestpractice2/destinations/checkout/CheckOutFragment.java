@@ -103,7 +103,9 @@ public class CheckOutFragment extends Fragment {
                             fillingFlavorV2 == null ? null : fillingFlavorV2.fillingFlavorName,
                             fillingFlavorV2 == null ? -0f : fillingFlavorV2.fillingFlavorPrice,
                             data,
-                            design.price));
+                            design.price,
+                            args.getCakeMessage(),
+                            totalPrice));
                 }
             });
         });

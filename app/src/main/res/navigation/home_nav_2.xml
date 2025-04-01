@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nav_2"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/cakeFlavorFragment"
+        android:name="com.denprog.codefestpractice2.destinations.cake_flavor_selection.CakeFlavorFragment"
+        android:label="fragment_cake_flavor_list"
+        tools:layout="@layout/fragment_cake_flavor_list">
+        <action
+            android:id="@+id/action_cakeFlavorFragment_to_whippedCreamFlavorFragment"
+            app:destination="@id/whippedCreamFlavorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/filledOrPlainFragment"
+        android:name="com.denprog.codefestpractice2.destinations.filled_or_plain.FilledOrPlainFragment"
+        android:label="fragment_filled_or_plain"
+        tools:layout="@layout/fragment_filled_or_plain">
+        <action
+            android:id="@+id/action_filledOrPlainFragment_to_designPickerFragment"
+            app:destination="@id/designPickerFragment" />
+        <action
+            android:id="@+id/action_filledOrPlainFragment_to_fillingFlavorFragment"
+            app:destination="@id/fillingFlavorFragment" />
+        <argument
+            android:name="whippedCreamFlavor"
+            app:argType="com.denprog.codefestpractice2.destinations.whipped_cream_flavor_selection.obj.WhippedCreamFlavorV2" />
+        <argument
+            android:name="cakeFlavorV2"
+            app:argType="com.denprog.codefestpractice2.destinations.cake_flavor_selection.obj.CakeFlavorV2" />
+    </fragment>
+    <action
+        android:id="@+id/action_filledOrPlainFragment_to_designPickerFragment"
+        app:destination="@id/designPickerFragment" />
+    <fragment
+        android:id="@+id/designPickerFragment"
+        android:name="com.denprog.codefestpractice2.destinations.design.DesignPickerFragment"
+        android:label="fragment_design_picker"
+        tools:layout="@layout/fragment_design_picker">
+        <action
+            android:id="@+id/action_designPickerFragment_to_personalDetailsFragment"
+            app:destination="@id/personalDetailsFragment" />
+        <argument
+            android:name="fillingFlavorV2"
+            android:defaultValue="@null"
+            app:argType="com.denprog.codefestpractice2.destinations.filling_flavor_selection.FillingFlavorV2"
+            app:nullable="true" />
+        <argument
+            android:name="cakeFlavorV2"
+            app:argType="com.denprog.codefestpractice2.destinations.cake_flavor_selection.obj.CakeFlavorV2" />
+        <argument
+            android:name="whippedCreamFlavorV2"
+            app:argType="com.denprog.codefestpractice2.destinations.whipped_cream_flavor_selection.obj.WhippedCreamFlavorV2" />
+    </fragment>
+    <action
+        android:id="@+id/action_designPickerFragment_to_personalDetailsFragment"
+        app:destination="@id/personalDetailsFragment" />
+    <fragment
+        android:id="@+id/fillingFlavorFragment"
+        android:name="com.denprog.codefestpractice2.destinations.filling_flavor_selection.FillingFlavorFragment"
+        android:label="FillingFlavorFragment">
+        <action
+            android:id="@+id/action_fillingFlavorFragment_to_designPickerFragment"
+            app:destination="@id/designPickerFragment" />
+        <argument
+            android:name="cakeFlavorV2"
+            app:argType="com.denprog.codefestpractice2.destinations.cake_flavor_selection.obj.CakeFlavorV2" />
+        <argument
+            android:name="whippedCreamFlavorV2"
+            app:argType="com.denprog.codefestpractice2.destinations.whipped_cream_flavor_selection.obj.WhippedCreamFlavorV2" />
+    </fragment>
+    <fragment
+        android:id="@+id/checkOutFragment"
+        android:name="com.denprog.codefestpractice2.destinations.checkout.CheckOutFragment"
+        android:label="CheckOutFragment">
+        <argument
+            android:name="firstName"
+            app:argType="string" />
+        <argument
+            android:name="middleName"
+            app:argType="string" />
+        <argument
+            android:name="lastName"
+            app:argType="string" />
+        <argument
+            android:name="cakeMessage"
+            app:argType="string" />
+        <argument
+            android:name="cakeFlavorV2"
+            app:argType="com.denprog.codefestpractice2.destinations.cake_flavor_selection.obj.CakeFlavorV2" />
+        <argument
+            android:name="whippedCreamFlavorV2"
+            app:argType="com.denprog.codefestpractice2.destinations.whipped_cream_flavor_selection.obj.WhippedCreamFlavorV2" />
+        <argument
+            android:name="fillingFlavorV2"
+            android:defaultValue="@null"
+            app:argType="com.denprog.codefestpractice2.destinations.filling_flavor_selection.FillingFlavorV2"
+            app:nullable="true" />
+        <argument
+            android:name="designName"
+            app:argType="string" />
+        <argument
+            android:name="designPrice"
+            app:argType="float" />
+        <argument
+            android:name="resource"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_checkOutFragment_to_homeFragment2"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_checkOutFragment_to_homeFragment2"
+        app:destination="@id/homeFragment" />
+    <fragment
+        android:id="@+id/personalDetailsFragment"
+        android:name="com.denprog.codefestpractice2.destinations.personal_details.PersonalDetailsFragment"
+        android:label="fragment_personal_details"
+        tools:layout="@layout/fragment_personal_details">
+        <action
+            android:id="@+id/action_personalDetailsFragment_to_checkOutFragment"
+            app:destination="@id/checkOutFragment" />
+        <argument
+            android:name="designName"
+            app:argType="string" />
+        <argument
+            android:name="floatPrice"
+            app:argType="float" />
+        <argument
+            android:name="resource"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <argument
+            android:name="whippedCreamFlavorV2"
+            app:argType="com.denprog.codefestpractice2.destinations.whipped_cream_flavor_selection.obj.WhippedCreamFlavorV2" />
+        <argument
+            android:name="fillingFlavorV2"
+            android:defaultValue="@null"
+            app:argType="com.denprog.codefestpractice2.destinations.filling_flavor_selection.FillingFlavorV2"
+            app:nullable="true" />
+        <argument
+            android:name="cakeFlavorV2"
+            app:argType="com.denprog.codefestpractice2.destinations.cake_flavor_selection.obj.CakeFlavorV2" />
+    </fragment>
+    <fragment
+        android:id="@+id/whippedCreamFlavorFragment"
+        android:name="com.denprog.codefestpractice2.destinations.whipped_cream_flavor_selection.WhippedCreamFlavorFragment"
+        android:label="WhippedCreamFlavorFragment">
+        <action
+            android:id="@+id/action_whippedCreamFlavorFragment_to_filledOrPlainFragment"
+            app:destination="@id/filledOrPlainFragment" />
+        <argument
+            android:name="cakeFlavorObj"
+            app:argType="com.denprog.codefestpractice2.destinations.cake_flavor_selection.obj.CakeFlavorV2" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.denprog.codefestpractice2.destinations.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment2_to_cakeFlavorFragment"
+            app:destination="@id/cakeFlavorFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_homeFragment2_to_cakeFlavorFragment"
+        app:destination="@id/cakeFlavorFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.denprog.codefestpractice2.destinations.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/orderHistoryFragment"
+        android:name="com.denprog.codefestpractice2.destinations.order_history.OrderHistoryFragment"
+        android:label="fragment_order_history"
+        tools:layout="@layout/fragment_order_history" >
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_viewOrderFragment"
+            app:destination="@id/viewOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewOrderFragment"
+        android:name="com.denprog.codefestpractice2.destinations.order_history.sub.ViewOrderFragment"
+        android:label="fragment_view_order"
+        tools:layout="@layout/fragment_view_order" >
+        <argument
+            android:name="orderToView"
+            app:argType="com.denprog.codefestpractice2.destinations.checkout.CheckOutObj" />
+    </fragment>
+</navigation>

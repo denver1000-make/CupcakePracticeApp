@@ -1,14 +1,13 @@
 package com.denprog.codefestpractice2.destinations.order_history;
 
-import android.view.View;
-
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.denprog.codefestpractice2.destinations.checkout.CheckOutObj;
 import com.denprog.codefestpractice2.room.AppDatabase;
 import com.denprog.codefestpractice2.room.dao.AppDao;
-import com.denprog.codefestpractice2.util.SimpleOperationCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -17,21 +16,24 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class OrderHistoryFragmentViewModel extends ViewModel {
+public class OrderHistoryViewModel extends ViewModel {
+    MutableLiveData<List<CheckOutObj>> mutableLiveData = new MutableLiveData<List<CheckOutObj>>(new ArrayList<>());
     AppDao appDao;
 
     @Inject
-    public OrderHistoryFragmentViewModel(AppDatabase appDatabase) {
+    public OrderHistoryViewModel(AppDatabase appDatabase) {
         this.appDao = appDatabase.getAppDao();
     }
 
-    public void fetchHistory(long userId, SimpleOperationCallback<List<CheckOutObj>> checkOutObj) {
+    public void fetchOrderHistory(long userId) {
         Executors.newSingleThreadExecutor().submit(new Runnable() {
             @Override
             public void run() {
-                List<CheckOutObj> checkOutObjs = appDao.getAllCheckOutObj(userId);
-                checkOutObj.onFinished(checkOutObjs);
+                List<CheckOutObj> list = appDao.getAllCheckOutObj(userId);
+                mutableLiveData.postValue(list);
             }
         });
     }
+
+
 }

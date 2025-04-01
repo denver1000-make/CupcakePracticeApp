@@ -9,11 +9,13 @@ import com.denprog.codefestpractice2.destinations.personal_details.PersonalDetai
 import com.denprog.codefestpractice2.room.AppDatabase;
 import com.denprog.codefestpractice2.room.dao.AppDao;
 import com.denprog.codefestpractice2.room.entity.User;
+import com.denprog.codefestpractice2.util.MainThreadRunner;
 import com.denprog.codefestpractice2.util.SimpleOperationCallback;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -25,7 +27,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class HomeActivityViewModel extends ViewModel {
     AppDao appDao;
-    public MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<User> userMutableLiveData = new MutableLiveData<>(null);
     public MutableLiveData<Float> totalPrice = new MutableLiveData<>();
     @Inject
     public HomeActivityViewModel(AppDatabase appDatabase) {
@@ -57,6 +59,31 @@ public class HomeActivityViewModel extends ViewModel {
             public User apply(Throwable throwable) {
                 userSimpleOperationCallback.onError(throwable.getLocalizedMessage());
                 return null;
+            }
+        });
+    }
+
+    public void logOut(SimpleOperationCallback<Void> simpleOperationCallback) {
+        simpleOperationCallback.onLoading();
+        Executors.newSingleThreadExecutor().submit(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    appDao.clearSavedLogin();
+                    MainThreadRunner.runOnMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            simpleOperationCallback.onFinished(null);
+                        }
+                    });
+                } catch (Exception e) {
+                    MainThreadRunner.runOnMain(new Runnable() {
+                        @Override
+                        public void run() {
+                            simpleOperationCallback.onError(e.getMessage());
+                        }
+                    });
+                }
             }
         });
     }

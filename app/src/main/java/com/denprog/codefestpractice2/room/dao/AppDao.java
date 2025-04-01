@@ -33,4 +33,7 @@ public interface AppDao {
 
     @Query("SELECT * FROM CheckOutObj WHERE userId =:userId")
     List<CheckOutObj> getAllCheckOutObj(long userId);
+
+    @Query("DELETE FROM SavedUser")
+    void clearSavedLogin();
 }

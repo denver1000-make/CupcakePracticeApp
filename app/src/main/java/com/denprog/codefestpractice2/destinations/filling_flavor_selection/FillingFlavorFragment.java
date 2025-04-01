@@ -57,6 +57,7 @@ public class FillingFlavorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.viewModel = new ViewModelProvider(requireActivity()).get(HomeActivityViewModel.class);
-
+        FillingFlavorFragmentArgs args = FillingFlavorFragmentArgs.fromBundle(getArguments());
+        viewModel.totalPrice.setValue(args.getCakeFlavorV2().cakeFlavorPrice + args.getWhippedCreamFlavorV2().flavorPrice);
     }
 }

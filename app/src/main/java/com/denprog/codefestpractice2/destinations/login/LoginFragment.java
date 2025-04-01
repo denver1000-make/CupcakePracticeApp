@@ -55,28 +55,19 @@ public class LoginFragment extends Fragment implements SimpleOperationCallback<U
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         NavController navController = Navigation.findNavController(requireActivity(), R.id.fragmentContainerView);
-        mViewModel.checkIfThereIsSavedLogin(new SimpleLambdaCallback<User>() {
-            @Override
-            public void doThing(User data) {
-                MainThreadRunner.runOnMain(() -> {
-                    if (data != null) {
-                        redirectToHome(data, navController);
-                    } else {
-                        binding.getRoot().setVisibility(View.VISIBLE);
-                        checkForRegistrationRedirectArgs();
-                        setupTextWatcher();
-                        setupLoginButton(navController);
-                    }
-                });
-            }
+        mViewModel.checkIfThereIsSavedLogin(data -> {
+            MainThreadRunner.runOnMain(() -> {
+                if (data != null) {
+                    redirectToHome(data, navController);
+                } else {
+                    binding.loginFormLayout.setVisibility(View.VISIBLE);
+                    checkForRegistrationRedirectArgs();
+                    setupTextWatcher();
+                    setupLoginButton(navController);
+                }
+            });
         });
-        binding.registerRedirect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.registerFragment
-                );
-            }
-        });
+        binding.registerRedirect.setOnClickListener(view -> navController.navigate(R.id.registerFragment));
     }
 
     public void checkForRegistrationRedirectArgs() {
@@ -96,25 +87,17 @@ public class LoginFragment extends Fragment implements SimpleOperationCallback<U
             String passwordValue = binding.passwordLoginField.getText().toString();
             showProgressDialog();
             CompletableFuture<User> manualLoginCompletableFuture = mViewModel.login(emailValue, passwordValue);
-            manualLoginCompletableFuture.thenAccept(new Consumer<User>() {
-                @Override
-                public void accept(User user) {
-                    MainThreadRunner.runOnMain(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideProgress();
-                            showSaveCredentialsPrompt((dialogInterface, i) -> {
-                                mViewModel.saveUserToDb(user, LoginFragment.this);
-                            }, (dialogInterface, i) -> {
-                                dialogInterface.dismiss();
-                                redirectToHome(user, navController);
-                            }, dialogInterface -> {
-                                redirectToHome(user, navController);
-                            });
-                        }
-                    });
-                }
-            });
+            manualLoginCompletableFuture.thenAccept(user -> MainThreadRunner.runOnMain(() -> {
+                hideProgress();
+                showSaveCredentialsPrompt((dialogInterface, i) -> {
+                    mViewModel.saveUserToDb(user, LoginFragment.this);
+                }, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    redirectToHome(user, navController);
+                }, dialogInterface -> {
+                    redirectToHome(user, navController);
+                });
+            }));
 
             manualLoginCompletableFuture.exceptionally(new Function<Throwable, User>() {
                 @Override
